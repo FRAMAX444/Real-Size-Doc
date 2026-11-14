@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f3ef">
+  <title>Dimensione Reale — visualizza i documenti in scala 1:1</title>
+  <link rel="stylesheet" href="./static/styles.css">
+  <script src="./static/vendor/jszip.min.js" defer></script>
+  <script src="./static/vendor/docx-preview.min.js" defer></script>
+  <script src="./static/vendor/ag-psd.bundle.js" defer></script>
+  <script src="./static/app.js" type="module"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand" aria-label="Dimensione Reale">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <div><strong>Dimensione Reale</strong><small>Il tuo documento, alla sua misura.</small></div>
+      </div>
+      <div class="top-actions">
+        <span class="privacy"><span class="privacy-dot"></span>Elaborazione sul tuo computer</span>
+        <button class="button button-dark" id="newFileButton" type="button">Apri documento <span aria-hidden="true">↗</span></button>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="landing" id="landing">
+        <div class="eyebrow"><span class="eyebrow-line"></span> VISUALIZZATORE 1:1</div>
+        <h1>Vedi ogni documento<br><em>nelle sue dimensioni reali.</em></h1>
+        <p class="intro">Apri un PDF, un file Word o Photoshop. Imposta la misura di stampa e scorri il documento quando supera lo schermo.</p>
+        <button class="dropzone" id="dropzone" type="button">
+          <span class="upload-icon" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none"><path d="M16 21V6m0 0-5 5m5-5 5 5M7 20v5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="drop-title">Trascina qui il tuo documento</span>
+          <span class="drop-subtitle">oppure <span>scegli un file</span> dal computer</span>
+          <span class="drop-formats">PDF <i></i> WORD DOCX <i></i> PSD / PSB</span>
+        </button>
+        <div class="landing-foot"><span class="check-icon">✓</span> I file restano nel tuo browser <span class="foot-separator">·</span> Fino a 100 MB</div>
+      </section>
+
+      <section class="workspace hidden" id="workspace" aria-label="Documento">
+        <div class="document-bar">
+          <div class="document-identity">
+            <div class="file-icon" id="fileIcon">PDF</div>
+            <div class="file-text"><strong id="fileName"></strong><span id="fileDetails"></span></div>
+          </div>
+          <div class="toolbar">
+            <button class="tool-button print-button" id="printSizeButton" type="button" aria-expanded="false">Misura di stampa</button>
+            <button class="tool-button calibration-button" id="calibrationButton" type="button" aria-expanded="false"><span class="ruler-symbol">↔</span> Calibra schermo</button>
+            <span class="toolbar-separator"></span>
+            <button class="tool-button icon-button" id="zoomOut" type="button" aria-label="Riduci">−</button>
+            <span class="zoom-value" id="zoomValue">100%</span>
+            <button class="tool-button icon-button" id="zoomIn" type="button" aria-label="Ingrandisci">+</button>
+            <button class="tool-button actual-size" id="actualSize" type="button">Dimensione reale</button>
+          </div>
+        </div>
+        <form class="print-panel hidden" id="printPanel">
+          <div class="print-copy">
+            <div class="panel-heading"><span class="panel-number">01</span><h2>Scegli la misura di stampa</h2></div>
+            <p>Inserisci quanto dovrà misurare la prima pagina, o l’immagine Photoshop, una volta stampata. La vista si aggiorna alla misura scelta. Per un documento con più pagine, le altre vengono ridimensionate nello stesso rapporto.</p>
+            <p class="print-note">Questa è un’anteprima: il file originale non viene modificato. Quando stampi, imposta le stesse misure nelle opzioni di stampa.</p>
+          </div>
+          <div class="print-fields">
+            <div class="print-inputs">
+              <label for="printWidth">Larghezza <span>cm</span><input id="printWidth" type="number" inputmode="decimal" min="0.1" max="300" step="0.01" required></label>
+              <span class="dimension-cross" aria-hidden="true">×</span>
+              <label for="printHeight">Altezza <span>cm</span><input id="printHeight" type="number" inputmode="decimal" min="0.1" max="300" step="0.01" required></label>
+            </div>
+            <label class="lock-proportions"><input id="lockProportions" type="checkbox" checked> Mantieni le proporzioni</label>
+            <div class="print-actions"><button class="tool-button" id="resetPrintSize" type="button">Usa misura del file</button><button class="button button-dark" type="submit">Applica dimensioni</button></div>
+          </div>
+        </form>
+        <div class="calibration-panel hidden" id="calibrationPanel">
+          <div class="calibration-copy">
+            <div class="panel-heading"><span class="panel-number">02</span><h2>Calibra il tuo schermo</h2></div>
+            <p>Il sito rileva automaticamente la risoluzione dello schermo e usa una scala iniziale. Il browser non può conoscere le dimensioni fisiche del monitor: per una misura 1:1 precisa, confronta il riquadro con una carta standard e regola la larghezza. Ripeti se cambi schermo o zoom del browser.</p>
+            <p class="screen-info" id="screenInfo"></p>
+            <div class="scale-control"><button id="scaleDown" type="button" aria-label="Riduci la misura">−</button><input id="scaleRange" type="range" min="1.5" max="9" step="0.01" aria-label="Larghezza della carta sullo schermo"><button id="scaleUp" type="button" aria-label="Aumenta la misura">+</button></div>
+            <div class="calibration-bottom"><span>Carta standard · 85,6 × 53,98 mm</span><button class="button button-dark" id="saveCalibration" type="button">Conferma misura</button></div>
+          </div>
+          <div class="card-stage"><div class="reference-card" id="referenceCard"><span class="card-chip"></span><span class="card-lines"><i></i><i></i></span><span class="card-caption">85,6 mm</span></div><div class="card-stage-hint">Allinea i bordi della carta reale</div></div>
+        </div>
+        <div class="viewer" id="viewer" tabindex="0" aria-label="Documento scorrevole"><div class="page-stack" id="pageStack"></div></div>
+        <div class="statusbar"><div><span class="status-dot"></span><strong id="scaleStatus">Scala 1:1</strong><span class="status-separator">·</span><span id="calibrationStatus">Calibrazione consigliata</span><span id="printStatus"></span></div><span id="scrollHint">Scorri per esplorare il documento ↔ ↕</span></div>
+      </section>
+    </main>
+    <input id="fileInput" type="file" accept=".pdf,.docx,.psd,.psb,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/vnd.adobe.photoshop" hidden>
+    <div class="toast hidden" id="toast" role="alert"></div>
+  </div>
+</body>
+</html>
