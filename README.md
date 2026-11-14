@@ -2,6 +2,8 @@
 
 Un sito statico per vedere PDF, Word `.docx` e Photoshop `.psd`/`.psb` alle dimensioni di stampa desiderate. I documenti sono elaborati nel browser: non vengono inviati al sito né a un server.
 
+**Sito pubblico:** [framax444.github.io/Real-Size-Doc](https://framax444.github.io/Real-Size-Doc/)
+
 ## Uso
 
 1. Apri il sito e scegli un file.
@@ -21,7 +23,7 @@ Apri [http://127.0.0.1:8765](http://127.0.0.1:8765).
 
 ## Pubblicazione
 
-Il contenuto della cartella può essere pubblicato dalla radice del ramo `main` con GitHub Pages. Tutte le librerie sono incluse in `static/vendor`, perciò il sito non richiede un servizio di conversione o una CDN.
+Il sito è pubblicato con GitHub Pages dalla radice del ramo `main` del repository [FRAMAX444/Real-Size-Doc](https://github.com/FRAMAX444/Real-Size-Doc). Tutte le librerie sono incluse in `static/vendor`, perciò non serve un servizio di conversione o una CDN.
 
 ## Librerie
 
